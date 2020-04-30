@@ -419,6 +419,7 @@ else
         if [[ $cleanUp == 1 ]]
         then
             rm -rf hoppet-${hoppetver}.tgz  >& /dev/null
+            rm -rf hoppet-${hoppetver}  >& /dev/null
         fi
     fi
 
@@ -708,7 +709,7 @@ then
 
     if [[ $version == "master" ]]
     then
-        git clone https://gitlab.cern.ch/fitters/xfitter.git >> $CURRENTDIR/install.log  2>&1
+        git clone --depth 1 https://gitlab.cern.ch/fitters/xfitter.git >> $CURRENTDIR/install.log  2>&1
         mv xfitter xfitter-master
     else
         if [[ $http_cmd == "wget" ]]; then
@@ -879,7 +880,7 @@ else
   #its the final cleanup
   if [[ $cleanUp == 1 ]]
   then
-    rm -rf compile xfiiter-$version.tar.gz >& /dev/null
+    rm -rf compile xfiiter-$version.tgz >& /dev/null
   fi
 
   #quick start guide
