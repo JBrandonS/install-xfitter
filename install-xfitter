@@ -3,6 +3,7 @@
 ## Configuration ####################################################
 
 ## Programs versions
+### Only garenteed to be used for 'master' 
 lhapdfver=6.2.3
 hathorver=2.0
 hoppetver=1.2.0
@@ -20,6 +21,9 @@ skip_apfelgrid=0
 
 ## Optional manual configurations
 #MANUALCONF=1
+
+# max number of make jobs to run, for niceness
+max_jobs=4
 
 ## Option 1: Use local environment
 ## These settings assume that root is already in your PATH and boost lib is installed
@@ -71,14 +75,15 @@ print_help () {
     echo "    -h, --help"
     echo "      print this help message"
     echo
+    echo "    --no-cleanup"
+    echo "      do not attempt to clean up left over install files"
+    echo
     echo "    --no-deps"
     echo "      do not install any dependences"
     echo
     echo "    --use-existing-deps"
     echo "      will try to use existing dependences instead of building everything"
     echo
-    echo "    --no-cleanup"
-    echo "      do not attempt to clean up left over install files"
 }
 
 if [[ -z $1 ]]
@@ -137,7 +142,7 @@ stripversion=`echo $version |sed "s/\.//g"`
 
 #check that requested version exists
 if [[ $version == "2.0.0" ]] || [[ $version == "2.0.1" ]]
-    then
+then
     # use older QCDNUM for xfitter-2.0.0
     if [[ $version == "2.0.0" ]]; then
       qcdnumver=17-01-13
@@ -352,7 +357,7 @@ else
             echo "Error, check install.log for details"
             exit 3
         fi
-        make -j 9 install >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -408,7 +413,7 @@ else
             echo "Error, check install.log for details"
             exit 3
         fi
-        make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -456,7 +461,7 @@ else
             echo "Error, check install.log for details"
             exit 3
         fi
-        make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -490,7 +495,7 @@ else
             echo "Error, check install.log for details"
             exit 3
         fi
-        make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -583,7 +588,7 @@ else
                 echo "Error, check install.log for details"
                 exit 3
             fi
-            make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+            make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
             if [[ $? != 0 ]]
             then
                 echo "Error, check install.log for details"
@@ -652,7 +657,7 @@ else
             echo "Error, check install.log for details"
             exit 3
         fi
-        make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -682,9 +687,9 @@ else
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
-            exit
+            exit 3
         fi
-        make -j 9 install  >> $CURRENTDIR/install.log  2>&1
+        make -j $max_jobs install  >> $CURRENTDIR/install.log  2>&1
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -822,11 +827,11 @@ then
   if [[ $version == "2.0.0" ]] || [[ $version == "2.0.1" ]]; then
     echo autoreconf --install                                 >> compile
     echo ./configure --enable-applgrid --enable-lhapdf --enable-apfel --enable-apfelxx --enable-mela  --enable-apfelgrid --enable-process    >> compile
-    echo make -j 9 install                                    >> compile
+    echo make -j $max_jobs install                                    >> compile
   elif [[ $version == "master_before_PionCeres_merge" ]] || [[ $version == "test_ceres_v0.01" ]]; then
     # SZ 10.07.2019 apfelgrid produces linking error in PionCeres
     echo ./configure --enable-applgrid --enable-lhapdf --enable-hathor --enable-apfel --enable-apfelxx --enable-mela --enable-process    >> compile
-    echo make -j 9 install                                    >> compile
+    echo make -j $max_jobs install                                    >> compile
     echo autoreconf --install                                 >> compile
   else
     # cmake compilation
@@ -839,7 +844,7 @@ fi
 if [[ $? != 0 ]]
 then
     echo "Error, check install.log for details"
-    exit
+    exit 4
 fi
 
 source ./setup.sh
@@ -856,7 +861,7 @@ else
   if [[ $? != 0 ]]
   then
       echo "Error in testing xfitter executable, check install.log for details"
-      exit 1
+      exit 4
   fi
   cd - >& /dev/null
   echo "xFitter installation successful!"
