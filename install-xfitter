@@ -467,6 +467,9 @@ else
         fi
         cd - >& /dev/null
 
+        # Fix issue with missing files, must be a better way to do this
+        cp applgrid-$applgridver/src/*.o applgrid-$applgridver/src/*.pcm $CURRENTDIR/deps/applgrid/lib
+
         if [[ $cleanUp == 1 ]]
         then
             rm -rf applgrid-$applgridver.tgz >& /dev/null
