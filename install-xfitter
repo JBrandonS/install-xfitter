@@ -270,9 +270,7 @@ fi
 if [[ $MODE == "cern" ]]
 then
     compiler=`echo gcc${gccv} | sed "s/\.//"`
-#    . /afs/cern.ch/sw/lcg/contrib/gcc/${gccv}/${arch}-${os}/setup.sh
     . /cvmfs/sft.cern.ch/lcg/contrib/gcc/${gccv}/${arch}-${os}/setup.sh
-#    . /afs/cern.ch/sw/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root/bin/thisroot.sh
     . /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root/bin/thisroot.sh
     if [[ $os == slc5 ]]
     then
@@ -683,7 +681,6 @@ else
         tar xfz numdiff-${numdiffver}.tar.gz  >> $CURRENTDIR/install.log  2>&1
         cd numdiff-${numdiffver}
         ./configure  --prefix=$CURRENTDIR/deps/numdiff  >> $CURRENTDIR/install.log  2>&1
-        echo export PATH=$CURRENTDIR/deps/numdiff/bin/:\$PATH >> $CURRENTDIR/setup.sh
         if [[ $? != 0 ]]
         then
             echo "Error, check install.log for details"
@@ -734,35 +731,34 @@ fi
 #make a setup run enviroment script
 echo "export XFITTER_INSTALL_DIR=`pwd`" >> setup.sh
 echo "export XFITTER_VERSION=$version" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/xfitter-$version/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/hoppet/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/applgrid/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/lhapdf/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/apfel/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/mela/bin:\$PATH" >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/apfelxx/bin:\$PATH" >> setup.sh
+
+echo "export HATHOR_DIR=$XFITTER_INSTALL_DIR/deps/Hathor-${hathorver}"       >> setup.sh
 
 echo `lhapdf-config --prefix`/lib*/python*/site-packages > /tmp/xf_py1234_a
 echo "export PYTHONPATH=$PYTHONPATH:`cat /tmp/xf_py1234_a` " >> setup.sh
 rm /tmp/xf_py1234_a
 
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/hoppet/lib/:\$LD_LIBRARY_PATH   >> setup.sh
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/lhapdf/lib/:\$LD_LIBRARY_PATH   >> setup.sh
-echo export HATHOR_DIR=$XFITTER_INSTALL_DIR/deps/Hathor-${hathorver}       >> setup.sh
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/applgrid/lib/:\$LD_LIBRARY_PATH >> setup.sh
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/apfel/lib/:\$LD_LIBRARY_PATH >> setup.sh
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/mela/lib/:\$LD_LIBRARY_PATH >> setup.sh
-echo export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/qcdnum/lib/:\$LD_LIBRARY_PATH >> setup.sh
-echo "export PATH=$XFITTER_INSTALL_DIR/deps/qcdnum/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/xfitter-$version/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/numdiff/bin/:\$PATH" >> $CURRENTDIR/setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/hoppet/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/applgrid/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/lhapdf/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/apfel/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/mela/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/apfelxx/bin:\$PATH" >> setup.sh
+echo "export PATH=\$XFITTER_INSTALL_DIR/deps/qcdnum/bin:\$PATH" >> setup.sh
+
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/hoppet/lib/:\$LD_LIBRARY_PATH"   >> setup.sh
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/lhapdf/lib/:\$LD_LIBRARY_PATH"   >> setup.sh
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/applgrid/lib/:\$LD_LIBRARY_PATH" >> setup.sh
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/apfel/lib/:\$LD_LIBRARY_PATH" >> setup.sh
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/mela/lib/:\$LD_LIBRARY_PATH" >> setup.sh
+echo "export LD_LIBRARY_PATH=\$XFITTER_INSTALL_DIR/deps/qcdnum/lib/:\$LD_LIBRARY_PATH" >> setup.sh
 
 
 if [[ $MODE == "cern" ]]
 then
-#    echo . /afs/cern.ch/sw/lcg/contrib/gcc/${gccv}/${arch}-${os}/setup.sh            >> setup.sh
     echo . /cvmfs/sft.cern.ch/lcg/contrib/gcc/${gccv}/${arch}-${os}/setup.sh            >> setup.sh
-#    . /afs/cern.ch/sw/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root/bin/thisroot.sh
-#    echo cd /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root >> setup.sh
-
     echo "cd /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root/" >> setup.sh
     echo ". /cvmfs/sft.cern.ch/lcg/app/releases/ROOT/${rootversion}/${arch}-${os}-${compiler}-opt/root/bin/thisroot.sh ">> setup.sh
     echo "cd -" >>setup.sh
@@ -770,9 +766,9 @@ fi
 
 #make a compilation script
 echo source ./setup.sh > compile
+echo export HATHOR_DIR=\$XFITTER_INSTALL_DIR/deps/Hathor-${hathorver}       >> compile
 echo export PATH=\$XFITTER_INSTALL_DIR/deps/hoppet/bin/:\$PATH       >> compile
 echo export PATH=\$XFITTER_INSTALL_DIR/deps/lhapdf/bin/:\$PATH       >> compile
-echo export HATHOR_DIR=\$XFITTER_INSTALL_DIR/deps/Hathor-${hathorver}       >> compile
 echo export PATH=\$XFITTER_INSTALL_DIR/deps/applgrid/bin/:\$PATH     >> compile
 echo export PATH=\$XFITTER_INSTALL_DIR/deps/apfel/bin/:\$PATH     >> compile
 echo export PATH=\$XFITTER_INSTALL_DIR/deps/mela/bin/:\$PATH     >> compile
