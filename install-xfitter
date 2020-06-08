@@ -468,7 +468,8 @@ else
         cd - >& /dev/null
 
         # Fix issue with missing files, must be a better way to do this
-        cp applgrid-$applgridver/src/*.h applgrid-$applgridver/src/*.o applgrid-$applgridver/src/*.pcm $CURRENTDIR/deps/applgrid/lib
+        cp applgrid-$applgridver/src/*.o applgrid-$applgridver/src/*.pcm $CURRENTDIR/deps/applgrid/lib
+	cp applgrid-$applgridver/src/*.h $CURRENTDIR/deps/applgrid/include/
 
         if [[ $cleanUp == 1 ]]
         then
