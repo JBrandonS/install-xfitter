@@ -469,7 +469,8 @@ else
 
         # Fix issue with missing files, must be a better way to do this
         cp applgrid-$applgridver/src/*.o applgrid-$applgridver/src/*.pcm $CURRENTDIR/deps/applgrid/lib
-	cp applgrid-$applgridver/src/*.h $CURRENTDIR/deps/applgrid/include/
+	mv $CURRENTDIR/deps/applgrid/include/appl_grid/* $CURRENTDIR/deps/applgrid/include/
+	rmdir $CURRENTDIR/deps/applgrid/include/appl_grid
 
         if [[ $cleanUp == 1 ]]
         then
